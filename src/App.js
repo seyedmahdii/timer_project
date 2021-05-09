@@ -6,11 +6,17 @@ import Timer from "./components/Timer/Timer";
 import Buttons from "./components/Buttons/Buttons";
 
 function App() {
+    const { total, timerOver } = useTimerContext();
+
     return (
         <div className="app">
-            <Timer />
-            {/* <Inputs />
-            <Buttons /> */}
+            {timerOver ? <h1 className="time-over">timer over</h1> : <Timer />}
+            {/* <Inputs /> */}
+            <Buttons />
+            <div
+                className="app__container"
+                style={{ height: `${total}vh` }}
+            ></div>
         </div>
     );
 }

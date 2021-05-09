@@ -3,10 +3,12 @@ import "./Timer.css";
 import { useTimerContext } from "./../../context";
 
 function Timer() {
-    const { hour, minute, second } = useTimerContext();
+    const { hour, minute, second, numberFormat } = useTimerContext();
+
     return (
         <div className="timer">
-            {hour} : {minute} : {second}
+            {numberFormat(hour)} : {numberFormat(minute)} :{" "}
+            {numberFormat(second)}
         </div>
     );
 }

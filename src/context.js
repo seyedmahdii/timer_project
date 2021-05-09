@@ -1,13 +1,86 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useRef, useEffect } from "react";
 const TimerContext = React.createContext("");
 
 const TimerProvider = ({ children }) => {
-    const [second, setSecond] = useState(0);
-    const [minute, setMinute] = useState(0);
-    const [hour, setHour] = useState(0);
+    const [isActive, setIsActive] = useState(false);
+    const [timerOver, setTimerOver] = useState(false);
+    const [second, setSecond] = useState(1);
+    const [minute, setMinute] = useState(1);
+    const [hour, setHour] = useState(1);
+    const total = second + minute * 60 + hour * 3600;
+    let timerRef = useRef(null);
+
+    useEffect(() => {
+        if (second === 0 && minute === 0 && hour === 0) {
+            clearInterval(timerRef.current);
+            setTimerOver(true);
+            setIsActive(false);
+        }
+    });
+
+    if (second === -1) {
+        setSecond(59);
+        setMinute((min) => {
+            if (min !== 0) {
+                return min - 1;
+            }
+            if (min === 0) {
+                if (hour !== 0) {
+                    setHour(hour - 1);
+                    return 59;
+                } else {
+                }
+            }
+        });
+    }
+    if (minute === -1) {
+        setMinute(59);
+
+        setHour((hour) => {
+            return hour !== 0 ? hour - 1 : 0;
+        });
+    }
+
+    const handleActive = () => {
+        setIsActive(!isActive);
+        if (isActive) {
+            clearInterval(timerRef.current);
+        } else {
+            timerRef.current = setInterval(() => {
+                setSecond((second) => {
+                    return second - 1;
+                });
+            }, 1000);
+        }
+    };
+
+    const handleReset = () => {
+        setSecond(26);
+        setMinute(5);
+        setHour(0);
+        setTimerOver(false);
+        setIsActive(false);
+        clearInterval(timerRef.current);
+    };
+
+    const numberFormat = (time) => {
+        return time < 10 ? `0${time}` : time;
+    };
 
     return (
-        <TimerContext.Provider value={{ second, minute, hour }}>
+        <TimerContext.Provider
+            value={{
+                second,
+                minute,
+                hour,
+                numberFormat,
+                isActive,
+                total,
+                handleActive,
+                handleReset,
+                timerOver,
+            }}
+        >
             {children}
         </TimerContext.Provider>
     );
