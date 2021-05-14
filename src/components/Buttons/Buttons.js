@@ -1,24 +1,45 @@
 import React from "react";
 import { useTimerContext } from "../../context";
-import "./Buttons.css";
+import useStyles from "./styles.js";
 
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import PauseIcon from "@material-ui/icons/Pause";
-import ClearIcon from "@material-ui/icons/Clear";
+import CloseIcon from "@material-ui/icons/Close";
 import { IconButton } from "@material-ui/core";
 
 function Buttons() {
-    const { handleActive, isActive, msecond, handleReset } = useTimerContext();
+    const {
+        handleActive,
+        isActive,
+        handleReset,
+        timerOver,
+    } = useTimerContext();
+    const styles = useStyles();
 
     return (
-        <div className="buttons">
+        <div className={styles.buttons}>
             <IconButton onClick={handleActive}>
-                {isActive ? <PauseIcon /> : <PlayArrowIcon />}
+                {isActive ? (
+                    <PauseIcon
+                        className={styles.handleButtons}
+                        style={{ fontSize: 85 }}
+                    />
+                ) : (
+                    <PlayArrowIcon
+                        className={styles.handleButtons}
+                        style={{ fontSize: 85 }}
+                    />
+                )}
             </IconButton>
 
-            <button type="button" onClick={handleReset}>
-                Reset
-            </button>
+            {timerOver || (
+                <IconButton onClick={handleReset}>
+                    <CloseIcon
+                        className={styles.handleButtons}
+                        style={{ fontSize: 85 }}
+                    />
+                </IconButton>
+            )}
         </div>
     );
 }

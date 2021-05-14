@@ -3,20 +3,19 @@ const TimerContext = React.createContext("");
 
 const TimerProvider = ({ children }) => {
     const [isActive, setIsActive] = useState(false);
-    const [timerOver, setTimerOver] = useState(false);
-    const [second, setSecond] = useState(1);
-    const [minute, setMinute] = useState(1);
-    const [hour, setHour] = useState(1);
-    const total = second + minute * 60 + hour * 3600;
+    const [timerOver, setTimerOver] = useState(true);
+    const [second, setSecond] = useState(6);
+    const [minute, setMinute] = useState(6);
+    const [hour, setHour] = useState(0);
     let timerRef = useRef(null);
 
     useEffect(() => {
-        if (second === 0 && minute === 0 && hour === 0) {
+        if (second == 0 && minute == 0 && hour == 0) {
             clearInterval(timerRef.current);
             setTimerOver(true);
             setIsActive(false);
         }
-    });
+    }, [second]);
 
     if (second === -1) {
         setSecond(59);
@@ -54,13 +53,20 @@ const TimerProvider = ({ children }) => {
         }
     };
 
-    const handleReset = () => {
-        setSecond(26);
-        setMinute(5);
-        setHour(0);
+    const handleSubmit = (event) => {
+        event.preventDefault();
         setTimerOver(false);
-        setIsActive(false);
+        setIsActive(true);
+        handleActive();
+    };
+
+    const handleReset = () => {
+        setSecond(6);
+        setMinute(6);
+        setHour(0);
         clearInterval(timerRef.current);
+        setTimerOver(true);
+        setIsActive(false);
     };
 
     const numberFormat = (time) => {
@@ -75,10 +81,13 @@ const TimerProvider = ({ children }) => {
                 hour,
                 numberFormat,
                 isActive,
-                total,
                 handleActive,
                 handleReset,
                 timerOver,
+                handleSubmit,
+                setSecond,
+                setMinute,
+                setHour,
             }}
         >
             {children}
