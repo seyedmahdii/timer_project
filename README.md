@@ -1,6 +1,6 @@
 # Timer Project
 
-Timer project powered with React.js
+Timer project powered by React.js
 <br/>
 run <code>npm i && npm start</code> to start the app.
 <br/><br/>
